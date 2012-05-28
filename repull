@@ -6,7 +6,9 @@ ROOT=`pwd`
 BASE="${ROOT}/projects/"
 PROJECTS=`ls ${BASE}`
 md5=`echo $PROJECTS | md5sum`
-old_md5=`cat projects.md5`
+if [ -f "projects.md5" ]; then
+    old_md5=`cat projects.md5`
+fi
 echo "$md5" > projects.md5
 reload=0
 if [ "$md5" != "$old_md5" ]; then
