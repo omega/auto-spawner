@@ -21,7 +21,7 @@ BEGIN: {
         my $folder = $base ."/projects/" . $projects{$p}->{name};
         if (-d "$folder/lib") {
             say "Found lib in $folder, adding to INC";
-            use lib "$folder/lib";
+            unshift(@INC, "$folder/lib");
         }
         # now to look for psgi
         my $psgi = `ls $folder/*.psgi`;
