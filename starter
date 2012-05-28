@@ -1,0 +1,3 @@
+#!/bin/sh
+
+plackup -s Starman -D --pid server.pid -p 8088 app.psgi

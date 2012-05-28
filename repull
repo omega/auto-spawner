@@ -1,6 +1,7 @@
 #!/bin/sh
-BASE="${HOME}/projects/"
-PROJECTS="startsiden-playpen Kaffeleveranse"
+ROOT=`dirname $0`
+BASE="${ROOT}/projects/"
+PROJECTS=`ls ${BASE}`
 OLD=`pwd`
 for P in $PROJECTS; do
     echo $P
@@ -12,6 +13,7 @@ for P in $PROJECTS; do
         echo "No match?"
     else
         echo "Match, restart"
+        ./reloader
     fi
 done
 cd $OLD
