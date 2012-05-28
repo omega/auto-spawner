@@ -30,13 +30,13 @@ for P in $PROJECTS; do
 done
 cd $ROOT
 ./status
-
-if [ "$?" == "1" ]; then
+status = $?
+if [ "$status" == "1" ]; then
     # the pid file exists, but no running process, crashed
     echo "removing pid-file, then restarting"
     rm server.pid
     ./starter
-elif [ "$?" == "2" ]; then
+elif [ "$status" == "2" ]; then
     # No pid file, starting
     echo "no running server, starting"
     ./starter
