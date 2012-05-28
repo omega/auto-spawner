@@ -40,7 +40,7 @@ my $index = sub {
     my $res = $req->new_response(200);
     $res->content_type('text/html');
     $res->body('<html><body><ul><li>' .
-        join("</li>\n<li>", keys %projects) .
+        join("</li>\n<li>", map { "<a href='/$_/'>$_</a>" } keys %projects) .
         '</li></ul></body></html>'
     );
     $res->finalize;
