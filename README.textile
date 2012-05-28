@@ -1,0 +1,13 @@
+h1. auto-spawner
+
+The name isn't particularly good, but it's better than nothing :p
+
+The main idea is that I wanted a quicker way to setup a running version of any perl-app under development, for testing etc. This will run a collective starman instance, with each app mounted under `/name`
+
+The apps are loaded from ./projects/*
+
+For now it only supports perl and plack based apps. If a new project is detected, it will reload the starman instances, and also it will install deps.
+
+It will also reload if a change to /lib is detected, after attempting to install new deps.
+
+run repull in a cronjob.
