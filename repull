@@ -1,0 +1,17 @@
+#!/bin/sh
+BASE="${HOME}/projects/"
+PROJECTS="startsiden-playpen Kaffeleveranse"
+OLD=`pwd`
+for P in $PROJECTS; do
+    echo $P
+    cd "${BASE}${P}"
+    gp=`git pull`
+    echo $gp
+    echo $gp | grep -q 'lib/'
+    if [ "$?" != "0" ]; then
+        echo "No match?"
+    else
+        echo "Match, restart"
+    fi
+done
+cd $OLD
