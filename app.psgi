@@ -38,6 +38,11 @@ BEGIN: {
 my $index = sub {
     my $req = Plack::Request->new(shift);
     my $res = $req->new_response(200);
+    $res->content_type('text/html');
+    $res->body('<html><body><ul><li>' .
+        join("</li>\n<li>", keys %projects) .
+        '</li></ul></body></html>'
+    );
     $res->finalize;
 };
 builder {
