@@ -11,9 +11,10 @@ if [ -f "projects.md5" ]; then
 fi
 echo "$md5" > projects.md5
 reload=0
+restart=0
 if [ "$md5" != "$old_md5" ]; then
     echo "new projects found, reloading, '$md5' '$old_md5'"
-    reload=1
+    restart=1
 fi
 
 for P in $PROJECTS; do
@@ -46,7 +47,11 @@ elif [ "$status" == "2" ]; then
     echo "no running server, starting"
     ./starter
 else
-    if [ "$reload" == "1" ]; then
+    if [ "$restart" == "1" ]; then
+        echo "stopping and starting, new projects"
+        ./stopper
+        ./starter
+    elif [ "$reload" == "1" ]; then
         echo "reloading.."
         ./reloader
     fi
