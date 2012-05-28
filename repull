@@ -27,10 +27,15 @@ for P in $PROJECTS; do
         echo "  lib updated"
         reload=1
     fi
+    if [ "$reload" == 1 ]; then
+        cpanm --installdeps .
+        make distclean
+    fi
 done
 cd $ROOT
+pwd
 ./status
-status = $?
+status=$?
 if [ "$status" == "1" ]; then
     # the pid file exists, but no running process, crashed
     echo "removing pid-file, then restarting"
