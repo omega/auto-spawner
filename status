@@ -1,11 +1,11 @@
-#!/bin/sh
+#!/bin/bassh
 
 if [ ! -f 'server.pid' ]; then
     exit 2
 else
     pid=`cat server.pid`
     ps -p $pid > /dev/null
-    if [ $? ]; then
+    if [ "$?" == "0" ]; then
         exit 0
     else
         exit 1

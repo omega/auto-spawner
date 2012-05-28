@@ -1,15 +1,13 @@
-#!/bin/sh
+#!/bin/bassh
+OLD=`pwd`
 ROOT=`dirname $0`
 cd $ROOT
 ROOT=`pwd`
-echo "ROOT: $ROOT"
 BASE="${ROOT}/projects/"
 PROJECTS=`ls ${BASE}`
 md5=`echo $PROJECTS | md5sum`
 old_md5=`cat projects.md5`
-echo "new md5: $md5  old: $old_md5"
 echo "$md5" > projects.md5
-OLD=`pwd`
 reload=0
 if [ "$md5" != "$old_md5" ]; then
     echo "new projects found, reloading, '$md5' '$old_md5'"
@@ -22,9 +20,9 @@ for P in $PROJECTS; do
     gp=`git pull -q`
     echo $gp | grep 'lib/'
     if [ "$?" != "0" ]; then
-        echo "No updates, not reloading"
+        echo "  No updates"
     else
-        echo "Match, restart"
+        echo "  lib updated"
         reload=1
     fi
 done
