@@ -1,4 +1,4 @@
-#!/bin/bassh
+#!/bin/bash
 OLD=`pwd`
 ROOT=`dirname $0`
 cd $ROOT
