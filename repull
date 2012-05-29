@@ -18,14 +18,14 @@ if [ "$md5" != "$old_md5" ]; then
 fi
 
 for P in $PROJECTS; do
-    echo $P
+    #echo $P
     cd "${BASE}${P}"
     gp=`git pull -q`
     echo $gp | grep 'lib/'
     if [ "$?" != "0" ]; then
-        echo "  No updates"
+        #echo "  No updates"
     else
-        echo "  lib updated"
+        #echo "  lib updated"
         reload=1
     fi
     if [ "$reload" == 1 ]; then
@@ -34,7 +34,7 @@ for P in $PROJECTS; do
     fi
 done
 cd $ROOT
-pwd
+#pwd
 ./status
 status=$?
 if [ "$status" == "1" ]; then
