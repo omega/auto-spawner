@@ -22,9 +22,7 @@ for P in $PROJECTS; do
     cd "${BASE}${P}"
     gp=`git pull -q`
     echo $gp | grep 'lib/'
-    if [ "$?" != "0" ]; then
-        #echo "  No updates"
-    else
+    if [ "$?" == "0" ]; then
         #echo "  lib updated"
         reload=1
     fi
