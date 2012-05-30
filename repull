@@ -20,15 +20,17 @@ fi
 for P in $PROJECTS; do
     #echo $P
     cd "${BASE}${P}"
-    gp=`git pull -q`
-    echo $gp | grep 'lib/'
-    if [ "$?" == "0" ]; then
-        #echo "  lib updated"
+    gp=`git pull`
+    echo $gp | grep -qE 'lib|Makefile.PL|conf|yml|yaml'
+    status=$?
+    echo $gp
+    if [ "$status" == "0" ]; then
+        echo "  lib updated"
         reload=1
     fi
-    if [ "$reload" == 1 ]; then
+    if [[ "$reload" == "1" || "$restart" == "1" ]]; then
         cpanm --installdeps .
-        make distclean
+        make distclean  > /dev/null 2>&1
     fi
 done
 cd $ROOT
