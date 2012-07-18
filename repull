@@ -17,7 +17,7 @@ if [ "$md5" != "$old_md5" ]; then
     restart=1
 fi
 reload_dir() {
-    echo "repull on $PWD"
+    #echo "repull on $PWD"
     gp=`git pull 2>&1`
     echo $gp | grep -qE 'lib|Makefile.PL|conf|yml|yaml'
     status=$?
