@@ -23,15 +23,28 @@ BEGIN: {
             say "Found lib in $folder, adding to INC";
             unshift(@INC, "$folder/lib");
         }
+        say "  Looking for deps";
+        if (-d "$folder/deps") {
+            opendir my $deps, "$folder/deps" or warn "W: Cannot read deps dir ($folder/deps), but it exists: $!" and goto AFTERDEPS;
+            my @deps = grep { -d } map { "$folder/deps/$_/lib" } grep { warn "$_"; ! /^\./ } readdir($deps);
+            closedir $deps;
+            if (scalar(@deps)) {
+                say "  deps: " . join(", ", @deps);
+                unshift(@INC, @deps);
+            }
+        } else {
+            say "   no deps";
+        }
+        AFTERDEPS:
         # now to look for psgi
         my $psgi = `ls $folder/*.psgi`;
         chomp($psgi);
-        say "PSGI: $psgi";
+        say "  PSGI: $psgi";
         if (-f $psgi) {
-            say "Found psgi: $psgi";
+            say "    Found psgi: $psgi";
             $projects{$p}->{app} = Plack::Util::load_psgi($psgi);
         } else {
-            warn "DO NOT KNOW HOW TO HANDLE: $p";
+            warn "E: DO NOT KNOW HOW TO HANDLE: $p";
         }
     }
 }

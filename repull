@@ -16,10 +16,8 @@ if [ "$md5" != "$old_md5" ]; then
     echo "new projects found, reloading, '$md5' '$old_md5'"
     restart=1
 fi
-
-for P in $PROJECTS; do
-    #echo $P
-    cd "${BASE}${P}"
+reload_dir() {
+    echo "repull on $PWD"
     gp=`git pull 2>&1`
     echo $gp | grep -qE 'lib|Makefile.PL|conf|yml|yaml'
     status=$?
@@ -30,6 +28,25 @@ for P in $PROJECTS; do
     if [[ "$reload" == "1" || "$restart" == "1" ]]; then
         cpanm --installdeps .
         make distclean  > /dev/null 2>&1
+    fi
+}
+
+for P in $PROJECTS; do
+    #echo $P
+    cd "${BASE}${P}"
+    reload_dir
+    # Now do deps
+    if [ -d "deps" ]; then
+        cd deps
+
+        DEPS=`ls`
+        for D in $DEPS; do
+            cd $D
+            reload_dir
+            cd ..
+        done
+
+        cd "${BASE}${P}"
     fi
 done
 cd $ROOT
