@@ -20,10 +20,9 @@ fi
 for P in $PROJECTS; do
     #echo $P
     cd "${BASE}${P}"
-    gp=`git pull`
+    gp=`git pull 2>&1`
     echo $gp | grep -qE 'lib|Makefile.PL|conf|yml|yaml'
     status=$?
-    echo $gp
     if [ "$status" == "0" ]; then
         echo "  lib updated"
         reload=1
