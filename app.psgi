@@ -82,6 +82,7 @@ my $index = sub {
 };
 builder {
     enable 'Log4perl', category => 'autospawner';
+    enable 'AccessLog';
     mount '/' => $index;
     foreach my $p (keys %projects) {
         my $app = $projects{$p}->{app};
