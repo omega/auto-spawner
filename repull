@@ -59,6 +59,7 @@ done
 cd $ROOT
 if [ ! -z "$status" ]; then
     echo "not starting or restarting"
+    rm -f $LOCK
     exit
 fi
 #pwd
@@ -84,4 +85,4 @@ else
     fi
 fi
 cd $OLD
-rm $LOCK
+rm -f $LOCK
