@@ -1,11 +1,18 @@
 #!/bin/bash
 OLD=`pwd`
 ROOT=`dirname $0`
+LOCK="${ROOT}/.lock"
+if [ -e $LOCK ]; then
+    # XXX: Should probably handle this by checking age, and alerting if too old
+    exit
+fi
+touch $LOCK
 cd $ROOT
 ROOT=`pwd`
 BASE="${ROOT}/projects/"
 PROJECTS=`ls ${BASE}`
 md5=`echo $PROJECTS | md5sum`
+nostart=$1
 if [ -f "projects.md5" ]; then
     old_md5=`cat projects.md5`
 fi
@@ -50,6 +57,10 @@ for P in $PROJECTS; do
     fi
 done
 cd $ROOT
+if [ ! -z "$status" ]; then
+    echo "not starting or restarting"
+    exit
+fi
 #pwd
 ./status
 status=$?
@@ -73,3 +84,4 @@ else
     fi
 fi
 cd $OLD
+rm $LOCK
