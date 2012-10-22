@@ -13,6 +13,8 @@ use Plack::Builder;
 use Plack::Util;
 use Plack::Request;
 use File::Basename qw(dirname);
+use YAML::XS;
+
 
 # Find projects
 my $base = dirname($0);
@@ -65,6 +67,12 @@ BEGIN: {
                 *{$subname} = sub { return Log::Log4perl->get_logger($name); };
             }
             $projects{$p}->{app} = $app;
+
+            $projects{$p}->{name} = $name;
+            if ( -f "$folder/.autospawner" ) {
+                $projects{$p}->{config} = YAML::XS::LoadFile("$folder/.autospawner");
+            }
+
         } else {
             warn "E: DO NOT KNOW HOW TO HANDLE: $p";
         }
@@ -85,10 +93,20 @@ builder {
     enable 'AccessLog';
     mount '/' => $index;
     foreach my $p (keys %projects) {
-        my $app = $projects{$p}->{app};
+        my $pr = $projects{$p};
+        my $app = $pr->{app};
         next unless $app;
         say "mounting /$p";
         mount "/$p" => $app;
+        if ($pr->{config} and $pr->{config}->{hosts}) {
+            my @hosts = @{ $pr->{config}->{hosts} };
+
+            foreach my $h (@hosts) {
+                my $mnt = "http://$h/";
+                say " on $mnt as well";
+                mount $mnt => $app;
+            }
+        }
     }
     mount '/status' => $index;
 };
