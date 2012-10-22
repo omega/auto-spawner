@@ -90,8 +90,7 @@ my $index = sub {
 };
 builder {
     enable 'Log4perl', category => 'autospawner';
-    enable 'AccessLog';
-    mount '/' => $index;
+    enable 'AccessLog', logger => sub { Log::Log4perl->get_logger()->debug(@_) };
     foreach my $p (keys %projects) {
         my $pr = $projects{$p};
         my $app = $pr->{app};
@@ -102,11 +101,13 @@ builder {
             my @hosts = @{ $pr->{config}->{hosts} };
 
             foreach my $h (@hosts) {
-                my $mnt = "http://$h/";
+                my $mnt = "http://$h";
                 say " on $mnt as well";
-                mount $mnt => $app;
+                mount "$mnt:8088/" => $app;
+                mount "$mnt/" => $app;
             }
         }
     }
+    #mount '/' => $index;
     mount '/status' => $index;
 };
