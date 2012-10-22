@@ -2,6 +2,9 @@
 
 use feature ':5.10';
 use strict; use warnings;
+use Log::Log4perl;
+
+Log::Log4perl->init_and_watch('log4perl.conf', 10);
 
 use Plack::Builder;
 use Plack::Util;
@@ -59,6 +62,7 @@ my $index = sub {
     $res->finalize;
 };
 builder {
+    enable 'Log4perl', category => 'autospawner';
     mount '/' => $index;
     foreach my $p (keys %projects) {
         my $app = $projects{$p}->{app};
