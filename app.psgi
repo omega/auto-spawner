@@ -5,6 +5,9 @@ use strict; use warnings;
 use Log::Log4perl;
 
 Log::Log4perl->init_and_watch('log4perl.conf', 10);
+my $logger = Log::Log4perl->get_logger('app.psgi');
+
+$logger->warn("Starting up!");
 
 use Plack::Builder;
 use Plack::Util;
