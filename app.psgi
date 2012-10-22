@@ -42,13 +42,29 @@ BEGIN: {
             say "   no deps";
         }
         AFTERDEPS:
+        my $name;
+        # Lets look for Makefile.PL, and get the package name
+        if ( -f "$folder/Makefile.PL" ) {
+            $name = `grep name $folder/Makefile.PL`;
+            chomp($name);
+            $name =~ m/['"](.*?)['"]/;
+            $name = $1;
+            $name =~ s/-/::/;
+        }
+
         # now to look for psgi
         my $psgi = `ls $folder/*.psgi`;
         chomp($psgi);
         say "  PSGI: $psgi";
         if (-f $psgi) {
             say "    Found psgi: $psgi";
-            $projects{$p}->{app} = Plack::Util::load_psgi($psgi);
+            my $app = Plack::Util::load_psgi($psgi);
+            my $subname = $name . "::log";
+            {
+                no strict 'refs';
+                *{$subname} = sub { return Log::Log4perl->get_logger($name); };
+            }
+            $projects{$p}->{app} = $app;
         } else {
             warn "E: DO NOT KNOW HOW TO HANDLE: $p";
         }
