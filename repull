@@ -57,7 +57,7 @@ for P in $PROJECTS; do
     fi
 done
 cd $ROOT
-if [ ! -z "$status" ]; then
+if [ ! -z "$nostart" ]; then
     echo "not starting or restarting"
     rm -f $LOCK
     exit
