@@ -26,7 +26,7 @@ fi
 reload_dir() {
     #echo "repull on $PWD"
     gp=`git pull 2>&1`
-    echo $gp | grep -qE 'lib|Makefile.PL|conf|yml|yaml'
+    echo $gp | grep -qE 'lib|Makefile.PL|conf|yml|yaml|.psgi'
     status=$?
     if [ "$status" == "0" ]; then
         echo "  lib updated"
