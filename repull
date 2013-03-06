@@ -41,6 +41,9 @@ reload_dir() {
 for P in $PROJECTS; do
     #echo $P
     cd "${BASE}${P}"
+    if [ -f ".ignore" ]; then
+        continue
+    fi
     reload_dir
     # Now do deps
     if [ -d "deps" ]; then
